@@ -41,6 +41,12 @@ class NalogRuPython:
         return resp.json()["id"]
 
     def get_ticket(self, ticket_id: str) -> dict:
+        """
+        Get JSON ticket
+
+        :param ticket_id: Ticket ID
+        :return: JSON ticket
+        """
         url = f'https://{self.HOST}/v2/tickets/{ticket_id}'
         headers = {
             'Host': self.HOST,
