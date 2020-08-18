@@ -49,7 +49,7 @@ class NalogRuPython:
         resp = requests.post(url, json=payload, headers=headers)
         self.__session_id = resp.json()['sessionId']
 
-    def get_ticket_id(self, qr: str) -> str:
+    def _get_ticket_id(self, qr: str) -> str:
         """
         Get ticker id by info from qr code
 
@@ -73,13 +73,14 @@ class NalogRuPython:
 
         return resp.json()["id"]
 
-    def get_ticket(self, ticket_id: str) -> dict:
+    def get_ticket(self, qr: str) -> dict:
         """
         Get JSON ticket
 
-        :param ticket_id: Ticket ID
+        :param qr: text from qr code. Example "t=20200727T174700&s=746.00&fn=9285000100206366&i=34929&fp=3951774668&n=1"
         :return: JSON ticket
         """
+        ticket_id = self._get_ticket_id(qr)
         url = f'https://{self.HOST}/v2/tickets/{ticket_id}'
         headers = {
             'Host': self.HOST,
@@ -100,6 +101,5 @@ class NalogRuPython:
 if __name__ == '__main__':
     client = NalogRuPython()
     qr_code = "t=20200727T1117&s=4850.00&fn=9287440300634471&i=13571&fp=3730902192&n=1"
-    ticket_id = client.get_ticket_id(qr_code)
-    ticket = client.get_ticket(ticket_id)
+    ticket = client.get_ticket(qr_code)
     print(json.dumps(ticket, indent=4))
