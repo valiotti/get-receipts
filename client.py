@@ -1,6 +1,5 @@
-import json
-
 import requests
+
 
 class NalogRuPython:
     HOST = 'irkkt-mobile.nalog.ru:8888'
@@ -13,7 +12,7 @@ class NalogRuPython:
     IF_NONE_MATCH = 'W/"39-ecMKyjU/fhuUBv4JoLNnlATwSM0"'
 
     def __init__(self):
-        self.__session_id = '5b1bdc9538ded657352567f1:be6459b5-5a78-4c70-b1af-303a47a42f89'
+        self.__session_id = '5b1bdc9538ded657352567f1:36d497a9-78ab-4d55-a586-2961aaa169dd'
 
     def get_ticket_id(self, qr: str) -> str:
         """
@@ -36,6 +35,30 @@ class NalogRuPython:
             'User-Agent': self.USER_AGENT,
         }
 
-        resp = requests.post(url, json=payload, headers=headers)
+        resp = requests.post(url, json=payload, headers=headers, verify=False)
 
         return resp.json()["id"]
+
+    def get_ticket(self, ticket_id: str) -> dict:
+        url = f'https://{self.HOST}/v2/tickets/{ticket_id}'
+        headers = {
+            'Host': self.HOST,
+            'sessionId': self.__session_id,
+            'Device-OS': self.DEVICE_OS,
+            'clientVersion': self.CLIENT_VERSION,
+            'Device-Id': self.DEVICE_ID,
+            'Accept': self.ACCEPT,
+            'User-Agent': self.USER_AGENT,
+            'Accept-Language': self.ACCEPT_LANGUAGE,
+        }
+
+        resp = requests.get(url, headers=headers, verify=False)
+
+        return resp.json()
+
+
+if __name__ == '__main__':
+    client = NalogRuPython()
+    qr_code = "t=20200727T1117&s=4850.00&fn=9287440300634471&i=13571&fp=3730902192&n=1"
+    ticket_id = client.get_ticket_id(qr_code)
+    print(client.get_ticket(ticket_id))
