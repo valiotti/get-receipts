@@ -1,3 +1,4 @@
+import json
 import requests
 
 
@@ -61,4 +62,5 @@ if __name__ == '__main__':
     client = NalogRuPython()
     qr_code = "t=20200727T1117&s=4850.00&fn=9287440300634471&i=13571&fp=3730902192&n=1"
     ticket_id = client.get_ticket_id(qr_code)
-    print(client.get_ticket(ticket_id))
+    ticket = client.get_ticket(ticket_id)
+    print(json.dumps(ticket, indent=4))
