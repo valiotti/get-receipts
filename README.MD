@@ -1,4 +1,4 @@
-#NalogRuPython
+# NalogRuPython
 
 Python клиент для проверки чеков с помощью API nalog.ru
 
